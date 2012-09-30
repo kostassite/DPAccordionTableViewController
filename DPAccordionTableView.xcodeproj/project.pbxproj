@@ -19,6 +19,7 @@
 		2E27CFE816188D3400C60ECC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E27CFE716188D3400C60ECC /* ViewController.m */; };
 		2E27CFEB16188D3400C60ECC /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E27CFE916188D3400C60ECC /* ViewController_iPhone.xib */; };
 		2E27CFEE16188D3400C60ECC /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E27CFEC16188D3400C60ECC /* ViewController_iPad.xib */; };
+		2E27CFF716188EDC00C60ECC /* DPAccordionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E27CFF616188EDC00C60ECC /* DPAccordionTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,8 @@
 		2E27CFE716188D3400C60ECC /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		2E27CFEA16188D3400C60ECC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
 		2E27CFED16188D3400C60ECC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
+		2E27CFF516188EDC00C60ECC /* DPAccordionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DPAccordionTableViewController.h; sourceTree = "<group>"; };
+		2E27CFF616188EDC00C60ECC /* DPAccordionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DPAccordionTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +90,7 @@
 			children = (
 				2E27CFDD16188D3400C60ECC /* AppDelegate.h */,
 				2E27CFDE16188D3400C60ECC /* AppDelegate.m */,
+				2E27CFF416188EAE00C60ECC /* DPAccordionTableViewController */,
 				2E27CFE616188D3400C60ECC /* ViewController.h */,
 				2E27CFE716188D3400C60ECC /* ViewController.m */,
 				2E27CFE916188D3400C60ECC /* ViewController_iPhone.xib */,
@@ -108,6 +112,15 @@
 				2E27CFE416188D3400C60ECC /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2E27CFF416188EAE00C60ECC /* DPAccordionTableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2E27CFF516188EDC00C60ECC /* DPAccordionTableViewController.h */,
+				2E27CFF616188EDC00C60ECC /* DPAccordionTableViewController.m */,
+			);
+			path = DPAccordionTableViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +193,7 @@
 				2E27CFDB16188D3400C60ECC /* main.m in Sources */,
 				2E27CFDF16188D3400C60ECC /* AppDelegate.m in Sources */,
 				2E27CFE816188D3400C60ECC /* ViewController.m in Sources */,
+				2E27CFF716188EDC00C60ECC /* DPAccordionTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
