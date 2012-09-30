@@ -49,33 +49,23 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)itableView
 {
     // Return the number of sections.
-    return [self.datasource numberOfSectionsInAccordionTableView:self];
+    return [self.datasource numberOfSectionsInAccordionTableView:tableView];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)itableView numberOfRowsInSection:(NSInteger)section
 {
     if (section==openSection) {
-        return [self.datasource accordionTableView:self numberOfRowsInExpandedSection:section];
+        return [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section];
     }
     return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView2 cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"AccordionCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (!cell) {
-        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    [cell.textLabel setText:[NSString stringWithFormat:@"Row %d",indexPath.row]];
-    // Configure the cell...
-    
-    return cell;
+    return [self.datasource accordionTableView:tableView cellForRowAtIndexPath:indexPath];
 }
 
 #pragma mark - Table view delegate
@@ -91,16 +81,16 @@
      */
 }
 
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+-(UIView*)tableView:(UITableView *)itableView viewForHeaderInSection:(NSInteger)section{
     UIView *header;
     if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:headerViewForSection:)]) {
-        header = [self.delegate accordionTableView:self headerViewForSection:section];
+        header = [self.delegate accordionTableView:tableView headerViewForSection:section];
     }else{
         header=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
         UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 300, 30)];
         
         if ([self.datasource respondsToSelector:@selector(accordionTableView:titleForSection:)]) {
-            [titleLabel setText:[self.datasource accordionTableView:self titleForSection:section]];
+            [titleLabel setText:[self.datasource accordionTableView:tableView titleForSection:section]];
         }else{
             [titleLabel setText:[NSString stringWithFormat:@"Section %d",section]];
         }
@@ -137,13 +127,13 @@
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
      if (openSection != NSNotFound) {
-        for (NSInteger i = 0; i < [self.datasource accordionTableView:self numberOfRowsInExpandedSection:openSection]; i++) {
+        for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:openSection]; i++) {
             [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:openSection]];
         }
     }
     //open new rows
     NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
-    for (NSInteger i = 0; i < [self.datasource accordionTableView:self numberOfRowsInExpandedSection:section]; i++) {
+    for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section]; i++) {
         [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:section]];
     }
     
@@ -175,7 +165,7 @@
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
     if (openSection != NSNotFound) {
-        for (NSInteger i = 0; i < [self.datasource accordionTableView:self numberOfRowsInExpandedSection:section]; i++) {
+        for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section]; i++) {
             [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:section]];
         }
     }

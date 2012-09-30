@@ -40,17 +40,30 @@
 
 #pragma mark - DPAccordionTableViewControllerDataSource
 
--(NSInteger)numberOfSectionsInAccordionTableView:(DPAccordionTableViewController*)tableView{
+-(NSInteger)numberOfSectionsInAccordionTableView:(UITableView*)tableView{
     return 5;
 }
 
--(NSInteger)accordionTableView:(DPAccordionTableViewController*)tableView numberOfRowsInExpandedSection:(NSInteger)section{
+-(NSInteger)accordionTableView:(UITableView*)tableView numberOfRowsInExpandedSection:(NSInteger)section{
     return 1;
 }
 
+-(UITableViewCell*)accordionTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *CellIdentifier = @"AccordionCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    [cell.textLabel setText:[NSString stringWithFormat:@"Row %d",indexPath.row]];
+    // Configure the cell...
+    
+    return cell;
+}
 #pragma mark - DPAccordionTableViewControllerDelegate
 
--(UIView*)accordionTableView:(DPAccordionTableViewController *)tableView headerViewForSection:(NSInteger)section{
+-(UIView*)accordionTableView:(UITableView *)tableView headerViewForSection:(NSInteger)section{
     UIView *view=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
     UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 300, 30)];
 
