@@ -14,14 +14,23 @@
 
 @required
 -(NSInteger)numberOfSectionsInAccordionTableView:(DPAccordionTableViewController*)tableView;
--(NSInteger)tableView:(DPAccordionTableViewController*)tableView numberOfRowsInExpandedSection:(NSInteger)section;
+-(NSInteger)accordionTableView:(DPAccordionTableViewController*)tableView numberOfRowsInExpandedSection:(NSInteger)section;
 
+@optional
+-(NSString*)accordionTableView:(DPAccordionTableViewController*)tableView titleForSection:(NSInteger)section;
+
+@end
+
+@protocol DPAccordionTableViewControllerDelegate <NSObject>
+
+@optional
+-(UIView*)accordionTableView:(DPAccordionTableViewController*)tableView headerViewForSection:(NSInteger)section;
 
 
 @end
 
-
 @interface DPAccordionTableViewController : UITableViewController
 
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDataSource> datasource;
+@property (nonatomic,weak) id<DPAccordionTableViewControllerDelegate> delegate;
 @end

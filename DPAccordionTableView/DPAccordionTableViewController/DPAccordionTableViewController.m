@@ -16,6 +16,7 @@
 
 @implementation DPAccordionTableViewController
 @synthesize datasource;
+@synthesize delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -55,7 +56,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section==openSection) {
-        return [self.datasource tableView:self numberOfRowsInExpandedSection:section];
+        return [self.datasource accordionTableView:self numberOfRowsInExpandedSection:section];
     }
     return 0;
 }
@@ -81,6 +82,24 @@
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:headerViewForSection:)]) {
+        return [self.delegate accordionTableView:self headerViewForSection:section];
+    }
+    
+    UIView *view=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+    UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 300, 30)];
+    
+    if ([self.datasource respondsToSelector:@selector(accordionTableView:titleForSection:)]) {
+        [titleLabel setText:[self.datasource accordionTableView:self titleForSection:section]];
+    }else{
+        [titleLabel setText:[NSString stringWithFormat:@"Section %d",section]];
+    }
+    [view addSubview:titleLabel];
+    
+    return view;
 }
 
 @end
