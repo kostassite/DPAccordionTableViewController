@@ -47,4 +47,16 @@
 -(NSInteger)accordionTableView:(DPAccordionTableViewController*)tableView numberOfRowsInExpandedSection:(NSInteger)section{
     return 1;
 }
+
+#pragma mark - DPAccordionTableViewControllerDelegate
+
+-(UIView*)accordionTableView:(DPAccordionTableViewController *)tableView headerViewForSection:(NSInteger)section{
+    UIView *view=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+    UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 300, 30)];
+
+    [titleLabel setText:[NSString stringWithFormat:@"Custom Section %d",section]];
+    [view addSubview:titleLabel];
+    
+    return view;
+}
 @end
