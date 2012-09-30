@@ -29,7 +29,7 @@
 
 @end
 
-@interface DPAccordionTableViewController : UITableViewController
+@interface DPAccordionTableViewController : UIViewController
 
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDataSource> datasource;
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDelegate> delegate;

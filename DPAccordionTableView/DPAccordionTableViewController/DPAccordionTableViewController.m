@@ -8,8 +8,9 @@
 
 #import "DPAccordionTableViewController.h"
 
-@interface DPAccordionTableViewController (){
+@interface DPAccordionTableViewController ()<UITableViewDataSource,UITableViewDelegate>{
     NSInteger openSection;
+    IBOutlet UITableView *tableView;
 }
 
 @end
@@ -18,25 +19,26 @@
 @synthesize datasource;
 @synthesize delegate;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     openSection=NSNotFound;
+
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    [tableView setDelegate:self];
+    [tableView setDataSource:self];
+    [tableView reloadData];
+    [self.view addSubview:tableView];
 }
 
 - (void)didReceiveMemoryWarning
@@ -102,4 +104,7 @@
     return view;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 50;
+}
 @end
