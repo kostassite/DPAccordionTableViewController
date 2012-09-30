@@ -87,24 +87,54 @@
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *header;
     if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:headerViewForSection:)]) {
-        return [self.delegate accordionTableView:self headerViewForSection:section];
-    }
-    
-    UIView *view=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
-    UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 300, 30)];
-    
-    if ([self.datasource respondsToSelector:@selector(accordionTableView:titleForSection:)]) {
-        [titleLabel setText:[self.datasource accordionTableView:self titleForSection:section]];
+        header = [self.delegate accordionTableView:self headerViewForSection:section];
     }else{
-        [titleLabel setText:[NSString stringWithFormat:@"Section %d",section]];
+        header=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+        UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 300, 30)];
+        
+        if ([self.datasource respondsToSelector:@selector(accordionTableView:titleForSection:)]) {
+            [titleLabel setText:[self.datasource accordionTableView:self titleForSection:section]];
+        }else{
+            [titleLabel setText:[NSString stringWithFormat:@"Section %d",section]];
+        }
+        [header addSubview:titleLabel];
     }
-    [view addSubview:titleLabel];
+
+    UITapGestureRecognizer *tapRecognizer=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerTapped:)];
+    [header addGestureRecognizer:tapRecognizer];
+
+    header.tag=section;
     
-    return view;
+    return header;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 50;
 }
+
+#pragma mark - Header Actions
+
+-(void)headerTapped:(UITapGestureRecognizer*)sender{
+    if (openSection!=sender.view.tag) { //einai kleisto
+        [self openSection:sender.view.tag];
+        openSection=sender.view.tag;
+    }else{
+        [self closeSection:sender.view.tag];
+        openSection=NSNotFound;
+    }
+    
+}
+
+#pragma mark - Open/Close TableView
+
+-(void)openSection:(NSInteger)section{
+    
+}
+
+-(void)closeSection:(NSInteger)section{
+    
+}
+
 @end
