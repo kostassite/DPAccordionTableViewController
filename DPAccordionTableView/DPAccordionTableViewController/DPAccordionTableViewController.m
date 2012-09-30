@@ -63,11 +63,16 @@
     return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView2 cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"AccordionCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
+    if (!cell) {
+        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    [cell.textLabel setText:[NSString stringWithFormat:@"Row %d",indexPath.row]];
     // Configure the cell...
     
     return cell;
@@ -119,10 +124,8 @@
 -(void)headerTapped:(UITapGestureRecognizer*)sender{
     if (openSection!=sender.view.tag) { //einai kleisto
         [self openSection:sender.view.tag];
-        openSection=sender.view.tag;
     }else{
         [self closeSection:sender.view.tag];
-        openSection=NSNotFound;
     }
     
 }
@@ -130,11 +133,62 @@
 #pragma mark - Open/Close TableView
 
 -(void)openSection:(NSInteger)section{
+    //close previous open rows
+    NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
+     if (openSection != NSNotFound) {
+        for (NSInteger i = 0; i < [self.datasource accordionTableView:self numberOfRowsInExpandedSection:openSection]; i++) {
+            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:openSection]];
+        }
+    }
+    //open new rows
+    NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
+    for (NSInteger i = 0; i < [self.datasource accordionTableView:self numberOfRowsInExpandedSection:section]; i++) {
+        [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:section]];
+    }
+    
+    // Style the animation so that there's a smooth flow in either direction.
+    UITableViewRowAnimation insertAnimation;
+    UITableViewRowAnimation deleteAnimation;
+    if (section == NSNotFound || section < openSection) {
+        insertAnimation = UITableViewRowAnimationTop;
+        deleteAnimation = UITableViewRowAnimationBottom;
+    }else {
+        insertAnimation = UITableViewRowAnimationBottom;
+        deleteAnimation = UITableViewRowAnimationTop;
+    }
+   
+    openSection=section;
+    // Apply the updates.
+    [self.view setUserInteractionEnabled:NO];
+    [tableView beginUpdates];
+    [tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
+    [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
+    [tableView endUpdates];
+
+    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self.view setUserInteractionEnabled:YES];
 }
 
 -(void)closeSection:(NSInteger)section{
+    //close open rows
+    NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
+    if (openSection != NSNotFound) {
+        for (NSInteger i = 0; i < [self.datasource accordionTableView:self numberOfRowsInExpandedSection:section]; i++) {
+            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:section]];
+        }
+    }
+    
+    openSection=NSNotFound;
+    // Apply the updates.
+    [self.view setUserInteractionEnabled:NO];
+    [tableView beginUpdates];
+    [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+    [tableView endUpdates];
+    
+//    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self.view setUserInteractionEnabled:YES];
 }
 
 @end
