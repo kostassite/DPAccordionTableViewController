@@ -16,14 +16,34 @@
 @end
 
 @implementation DPAccordionTableViewController
-@synthesize datasource;
-@synthesize delegate;
+@synthesize datasource=_datasource;
+@synthesize delegate=_delegate;
+
+-(void)setDatasource:(id<DPAccordionTableViewControllerDataSource>)datasource{
+    _datasource=datasource;
+    if (!_delegate) {
+        [tableView reloadData];
+    }
+
+}
+
+-(void)setDelegate:(id<DPAccordionTableViewControllerDelegate>)delegate{
+    _delegate=delegate;
+    if (_datasource) {
+        [tableView reloadData];
+    }
+
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     openSection=NSNotFound;
-
+    
+    tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    [tableView setDelegate:self];
+    [tableView setDataSource:self];
+    [self.view addSubview:tableView];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -34,11 +54,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    [tableView setDelegate:self];
-    [tableView setDataSource:self];
-    [tableView reloadData];
-    [self.view addSubview:tableView];
+
 }
 
 - (void)didReceiveMemoryWarning
