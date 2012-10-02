@@ -27,7 +27,7 @@
 
 @optional
 -(UIView*)accordionTableView:(UITableView*)tableView headerViewForSection:(NSInteger)section;
-
+-(void)accordionTableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
 
