@@ -9,7 +9,7 @@
 #import "DPAccordionTableViewController.h"
 
 @interface DPAccordionTableViewController ()<UITableViewDataSource,UITableViewDelegate>{
-    NSInteger openSection;
+
     
 }
 
@@ -19,7 +19,7 @@
 @synthesize datasource;
 @synthesize delegate;
 @synthesize tableView;
-
+@synthesize openSection;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -148,8 +148,9 @@
         insertAnimation = UITableViewRowAnimationBottom;
         deleteAnimation = UITableViewRowAnimationTop;
     }
-   
+    NSInteger oldOpenSection=openSection;
     openSection=section;
+
     // Apply the updates.
     [self.view setUserInteractionEnabled:NO];
     [tableView beginUpdates];
@@ -160,6 +161,17 @@
     if ([indexPathsToInsert count]!=0) {
         [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
+
+    
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)]&&oldOpenSection!=NSNotFound) {
+        [self.delegate accordionTableView:tableView didCloseSection:oldOpenSection];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:didOpenSection:)]) {
+        [self.delegate accordionTableView:tableView didOpenSection:section];
+    }
+    
+
     [self.view setUserInteractionEnabled:YES];
 }
 
@@ -180,6 +192,9 @@
     [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
     [tableView endUpdates];
     
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)]) {
+        [self.delegate accordionTableView:tableView didCloseSection:section];
+    }
 //    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     [self.view setUserInteractionEnabled:YES];
 }

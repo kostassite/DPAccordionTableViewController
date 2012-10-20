@@ -29,6 +29,8 @@
 -(UIView*)accordionTableView:(UITableView*)tableView headerViewForSection:(NSInteger)section;
 -(void)accordionTableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 
+-(void)accordionTableView:(UITableView *)tableView didOpenSection:(NSInteger)section;
+-(void)accordionTableView:(UITableView *)tableView didCloseSection:(NSInteger)section;
 @end
 
 @interface DPAccordionTableViewController : UIViewController
@@ -36,5 +38,6 @@
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDataSource> datasource;
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDelegate> delegate;
 
+@property (nonatomic,readonly) NSInteger openSection;
 @property (nonatomic,strong,readonly) UITableView *tableView;
 @end
