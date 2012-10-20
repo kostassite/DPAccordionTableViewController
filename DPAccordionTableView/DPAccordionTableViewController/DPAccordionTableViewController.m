@@ -10,7 +10,7 @@
 
 @interface DPAccordionTableViewController ()<UITableViewDataSource,UITableViewDelegate>{
     NSInteger openSection;
-    IBOutlet UITableView *tableView;
+    
 }
 
 @end
@@ -18,6 +18,7 @@
 @implementation DPAccordionTableViewController
 @synthesize datasource;
 @synthesize delegate;
+@synthesize tableView;
 
 - (void)viewDidLoad
 {
