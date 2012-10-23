@@ -8,7 +8,7 @@
 
 #import "DPAccordionTableViewController.h"
 
-@interface DPAccordionTableViewController ()<UITableViewDataSource,UITableViewDelegate>{
+@interface DPAccordionTableViewController ()<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>{
 
     
 }
@@ -99,6 +99,7 @@
     }
 
     UITapGestureRecognizer *tapRecognizer=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerTapped:)];
+    [tapRecognizer setDelegate:self];
     [header addGestureRecognizer:tapRecognizer];
 
     header.tag=section;
@@ -119,6 +120,15 @@
         [self closeSection:sender.view.tag];
     }
     
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isKindOfClass:[UIControl class]]) {
+        // we touched a button, slider, or other UIControl
+        return NO; // ignore the touch
+    }
+    return YES; // handle the touch
 }
 
 #pragma mark - Open/Close TableView
