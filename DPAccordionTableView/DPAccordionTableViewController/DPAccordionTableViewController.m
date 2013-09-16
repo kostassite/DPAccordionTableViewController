@@ -25,7 +25,10 @@
     [super viewDidLoad];
     openSection=NSNotFound;
 
-
+    tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    [tableView setDelegate:self];
+    [tableView setDataSource:self];
+    [self.view addSubview:tableView];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -35,11 +38,8 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    [tableView setDelegate:self];
-    [tableView setDataSource:self];
     [tableView reloadData];
-    [self.view addSubview:tableView];
+
 }
 
 - (void)didReceiveMemoryWarning
