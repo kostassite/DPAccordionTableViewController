@@ -40,4 +40,6 @@
 
 @property (nonatomic,readonly) NSInteger openSection;
 @property (nonatomic,strong,readonly) UITableView *tableView;
+
+@property (nonatomic) CGFloat tableHeaderHeight;
 @end
