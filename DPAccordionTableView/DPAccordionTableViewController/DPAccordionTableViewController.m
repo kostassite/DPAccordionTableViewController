@@ -19,33 +19,45 @@
 @synthesize datasource;
 @synthesize delegate;
 @synthesize tableView;
-@synthesize openSection;
+@synthesize openSection = _openSection;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    openSection=NSNotFound;
+    _openSection=NSNotFound;
 
     tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [self.view addSubview:tableView];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [tableView reloadData];
 
+    if (self.openSection!=NSNotFound) {
+        [self openSection:self.openSection];
+    }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(NSInteger)openSection{
+    return _openSection;
+}
+
+-(void)setOpenSection:(NSInteger)openSection{
+    if (openSection!=NSNotFound) {
+        [self openSection:openSection];
+    }else{
+        _openSection = openSection;
+    }
+    
 }
 
 #pragma mark - Table view data source
@@ -58,7 +70,7 @@
 
 - (NSInteger)tableView:(UITableView *)itableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section==openSection) {
+    if (section==_openSection) {
         return [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section];
     }
     return 0;
@@ -117,7 +129,7 @@
 #pragma mark - Header Actions
 
 -(void)headerTapped:(UITapGestureRecognizer*)sender{
-    if (openSection!=sender.view.tag) { //einai kleisto
+    if (_openSection!=sender.view.tag) { //einai kleisto
         [self openSection:sender.view.tag];
     }else{
         [self closeSection:sender.view.tag];
@@ -140,9 +152,9 @@
     //close previous open rows
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
-     if (openSection != NSNotFound) {
-        for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:openSection]; i++) {
-            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:openSection]];
+     if (_openSection != NSNotFound) {
+        for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:_openSection]; i++) {
+            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:_openSection]];
         }
     }
     //open new rows
@@ -154,15 +166,15 @@
     // Style the animation so that there's a smooth flow in either direction.
     UITableViewRowAnimation insertAnimation;
     UITableViewRowAnimation deleteAnimation;
-    if (section == NSNotFound || section < openSection) {
+    if (section == NSNotFound || section < _openSection) {
         insertAnimation = UITableViewRowAnimationTop;
         deleteAnimation = UITableViewRowAnimationBottom;
     }else {
         insertAnimation = UITableViewRowAnimationBottom;
         deleteAnimation = UITableViewRowAnimationTop;
     }
-    NSInteger oldOpenSection=openSection;
-    openSection=section;
+    NSInteger oldOpenSection=_openSection;
+    _openSection=section;
 
     // Apply the updates.
     [self.view setUserInteractionEnabled:NO];
@@ -192,13 +204,13 @@
     //close open rows
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
-    if (openSection != NSNotFound) {
+    if (_openSection != NSNotFound) {
         for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section]; i++) {
             [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:section]];
         }
     }
     
-    openSection=NSNotFound;
+    _openSection=NSNotFound;
     // Apply the updates.
     [self.view setUserInteractionEnabled:NO];
     [tableView beginUpdates];
