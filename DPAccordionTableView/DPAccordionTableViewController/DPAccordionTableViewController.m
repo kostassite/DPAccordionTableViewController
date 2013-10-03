@@ -55,7 +55,7 @@
     if (openSection!=NSNotFound) {
         [self openSection:openSection];
     }else{
-        _openSection = openSection;
+        [self closeSection:_openSection];
     }
     
 }

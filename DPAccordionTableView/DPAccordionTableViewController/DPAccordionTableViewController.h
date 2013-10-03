@@ -38,7 +38,7 @@
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDataSource> datasource;
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDelegate> delegate;
 
-@property (nonatomic) NSInteger openSection;
+@property (nonatomic) NSInteger openSection; //set NSNotFound to close all sections
 @property (nonatomic,strong,readonly) UITableView *tableView;
 
 @property (nonatomic) CGFloat tableHeaderHeight;
