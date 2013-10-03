@@ -149,6 +149,12 @@
 #pragma mark - Open/Close TableView
 
 -(void)openSection:(NSInteger)section{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:shouldOpenSection:)]) {
+        if (![self.delegate accordionTableView:tableView shouldOpenSection:section]) {
+            return;
+        }
+    }
+    
     //close previous open rows
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
@@ -201,6 +207,12 @@
 }
 
 -(void)closeSection:(NSInteger)section{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:shouldCloseSection:)]) {
+        if (![self.delegate accordionTableView:tableView shouldCloseSection:section]) {
+            return;
+        }
+    }
+    
     //close open rows
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     

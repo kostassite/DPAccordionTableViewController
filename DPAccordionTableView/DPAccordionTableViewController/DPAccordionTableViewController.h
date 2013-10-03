@@ -31,6 +31,10 @@
 
 -(void)accordionTableView:(UITableView *)tableView didOpenSection:(NSInteger)section;
 -(void)accordionTableView:(UITableView *)tableView didCloseSection:(NSInteger)section;
+
+-(BOOL)accordionTableView:(UITableView *)tableView shouldOpenSection:(NSInteger)section;
+-(BOOL)accordionTableView:(UITableView *)tableView shouldCloseSection:(NSInteger)section;
+
 @end
 
 @interface DPAccordionTableViewController : UIViewController
