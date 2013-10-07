@@ -154,6 +154,15 @@
             return;
         }
     }
+    NSInteger oldOpenSection=_openSection;
+
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:willCloseSection:)]&&oldOpenSection!=NSNotFound) {
+        [self.delegate accordionTableView:tableView willCloseSection:oldOpenSection];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:willOpenSection:)]) {
+        [self.delegate accordionTableView:tableView willOpenSection:section];
+    }
     
     //close previous open rows
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
@@ -179,7 +188,6 @@
         insertAnimation = UITableViewRowAnimationBottom;
         deleteAnimation = UITableViewRowAnimationTop;
     }
-    NSInteger oldOpenSection=_openSection;
     _openSection=section;
 
     // Apply the updates.
@@ -211,6 +219,10 @@
         if (![self.delegate accordionTableView:tableView shouldCloseSection:section]) {
             return;
         }
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:willCloseSection:)]) {
+        [self.delegate accordionTableView:tableView willCloseSection:section];
     }
     
     //close open rows

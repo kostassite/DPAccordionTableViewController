@@ -29,6 +29,9 @@
 -(UIView*)accordionTableView:(UITableView*)tableView headerViewForSection:(NSInteger)section;
 -(void)accordionTableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 
+-(void)accordionTableView:(UITableView *)tableView willOpenSection:(NSInteger)section;
+-(void)accordionTableView:(UITableView *)tableView willCloseSection:(NSInteger)section;
+
 -(void)accordionTableView:(UITableView *)tableView didOpenSection:(NSInteger)section;
 -(void)accordionTableView:(UITableView *)tableView didCloseSection:(NSInteger)section;
 
