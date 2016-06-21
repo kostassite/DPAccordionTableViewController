@@ -27,6 +27,9 @@
 
 @optional
 -(UIView*)accordionTableView:(UITableView*)tableView headerViewForSection:(NSInteger)section;
+-(CGFloat)accordionTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+
 -(void)accordionTableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 
 -(void)accordionTableView:(UITableView *)tableView willOpenSection:(NSInteger)section;

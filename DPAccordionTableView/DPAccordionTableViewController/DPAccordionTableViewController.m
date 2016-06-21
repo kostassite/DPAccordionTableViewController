@@ -126,6 +126,10 @@
     return 50;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView2 heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return [self.delegate accordionTableView:tableView2 heightForRowAtIndexPath:indexPath];
+}
+
 #pragma mark - Header Actions
 
 -(void)headerTapped:(UITapGestureRecognizer*)sender{
