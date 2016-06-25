@@ -30,6 +30,12 @@
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [self.view addSubview:tableView];
+    
+    [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(tableView);
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:nil views:viewsDictionary]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[tableView]|" options:0 metrics:nil views:viewsDictionary]];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
