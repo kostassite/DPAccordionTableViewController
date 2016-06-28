@@ -43,7 +43,7 @@
     [tableView reloadData];
 
     if (self.openSection!=NSNotFound) {
-        [self openSection:self.openSection];
+        [self openSection:self.openSection animated:NO];
     }
 }
 
@@ -58,8 +58,12 @@
 }
 
 -(void)setOpenSection:(NSInteger)openSection{
+    [self setOpenSection:openSection animated:YES];
+}
+
+-(void)setOpenSection:(NSInteger)openSection animated:(BOOL)animated{
     if (openSection!=NSNotFound) {
-        [self openSection:openSection];
+        [self openSection:openSection animated:animated];
     }else{
         [self closeSection:_openSection];
     }
@@ -183,7 +187,7 @@
 
 -(void)headerTapped:(UITapGestureRecognizer*)sender{
     if (_openSection!=sender.view.tag) { //einai kleisto
-        [self openSection:sender.view.tag];
+        [self openSection:sender.view.tag animated:YES];
     }else{
         [self closeSection:sender.view.tag];
     }
@@ -201,7 +205,7 @@
 
 #pragma mark - Open/Close TableView
 
--(void)openSection:(NSInteger)section{
+-(void)openSection:(NSInteger)section animated:(BOOL)animated{
     if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:shouldOpenSection:)]) {
         if (![self.delegate accordionTableView:tableView shouldOpenSection:section]) {
             return;
@@ -240,6 +244,11 @@
     }else {
         insertAnimation = UITableViewRowAnimationBottom;
         deleteAnimation = UITableViewRowAnimationTop;
+    }
+    
+    if (!animated) {
+        insertAnimation = UITableViewRowAnimationNone;
+        deleteAnimation = UITableViewRowAnimationNone;
     }
     _openSection=section;
 
