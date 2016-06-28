@@ -152,7 +152,7 @@
     }
     //is open and need to forceSectionAtBottom
     if ([self numberOfSectionsInTableView:tableView] - 1 == section) { //is the last one
-        return 0;
+        return 1;
     }
     
     NSInteger heightOfHeaderOfClosedSectionsAfter = 0;
@@ -162,7 +162,7 @@
     
     NSInteger heightOfShownRows = 0;
     for (NSInteger row = 0 ; row < [self tableView:tableView numberOfRowsInSection:section]; row++) {
-        heightOfShownRows = [self tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
+        heightOfShownRows += [self tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
     }
     
     NSInteger neededFooterHeight = self.tableView.bounds.size.height - heightOfHeaderOfClosedSectionsAfter - heightOfShownRows ;
