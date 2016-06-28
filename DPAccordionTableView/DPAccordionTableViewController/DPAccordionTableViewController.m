@@ -125,6 +125,49 @@
     return header;
 }
 
+-(UIView*)tableView:(UITableView *)_tableView viewForFooterInSection:(NSInteger)section{
+    NSInteger neededFooterHeight = [self neededFooterHeightForForceClosedSectionsAtBottomWithSection:section];
+    if (neededFooterHeight > 0) {
+        UIView *footer = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, neededFooterHeight)];
+        return footer;
+    }else{
+        return nil;
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return [self neededFooterHeightForForceClosedSectionsAtBottomWithSection:section];
+}
+
+-(NSInteger)neededFooterHeightForForceClosedSectionsAtBottomWithSection:(NSInteger)section{
+    if (!self.forceClosedSectionsAtBottom) {
+        return 0;
+    }
+    if (section!=self.openSection) {
+        return 0;
+    }
+    //is open and need to forceSectionAtBottom
+    if ([self numberOfSectionsInTableView:tableView] - 1 == section) { //is the last one
+        return 0;
+    }
+    
+    NSInteger heightOfHeaderOfClosedSectionsAfter = 0;
+    for (NSInteger currSection = 0 ; currSection < [self numberOfSectionsInTableView:tableView] ; currSection++) {
+        heightOfHeaderOfClosedSectionsAfter += [self tableView:tableView heightForHeaderInSection:currSection];
+    }
+    
+    NSInteger heightOfShownRows = 0;
+    for (NSInteger row = 0 ; row < [self tableView:tableView numberOfRowsInSection:section]; row++) {
+        heightOfShownRows = [self tableView:tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
+    }
+    
+    NSInteger neededFooterHeight = self.tableView.bounds.size.height - heightOfHeaderOfClosedSectionsAfter - heightOfShownRows ;
+    if (neededFooterHeight<0) {
+        return 0;
+    }
+    return neededFooterHeight;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (self.tableHeaderHeight) {
         return self.tableHeaderHeight;
@@ -207,10 +250,15 @@
     [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
     [tableView endUpdates];
 
-    if ([indexPathsToInsert count]!=0) {
-        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    }
-
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.forceClosedSectionsAtBottom) {
+            [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }else{
+            if ([indexPathsToInsert count]!=0) {
+                [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            }
+        }
+    });
     
     if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)]&&oldOpenSection!=NSNotFound) {
         [self.delegate accordionTableView:tableView didCloseSection:oldOpenSection];

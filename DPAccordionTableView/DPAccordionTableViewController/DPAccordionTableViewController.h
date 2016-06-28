@@ -52,4 +52,7 @@
 @property (nonatomic,strong,readonly) UITableView *tableView;
 
 @property (nonatomic) CGFloat tableHeaderHeight;
+
+@property (nonatomic) BOOL forceClosedSectionsAtBottom;
+
 @end
