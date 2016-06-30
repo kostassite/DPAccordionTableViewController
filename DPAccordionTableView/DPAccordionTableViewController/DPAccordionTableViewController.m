@@ -206,6 +206,9 @@
 #pragma mark - Open/Close TableView
 
 -(void)openSection:(NSInteger)section animated:(BOOL)animated{
+    if (_openSection>=[datasource numberOfSectionsInAccordionTableView:tableView]) {
+        _openSection = NSNotFound;
+    }
     if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:shouldOpenSection:)]) {
         if (![self.delegate accordionTableView:tableView shouldOpenSection:section]) {
             return;
