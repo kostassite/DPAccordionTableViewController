@@ -120,7 +120,8 @@
 				2E27CFF516188EDC00C60ECC /* DPAccordionTableViewController.h */,
 				2E27CFF616188EDC00C60ECC /* DPAccordionTableViewController.m */,
 			);
-			path = DPAccordionTableViewController;
+			name = DPAccordionTableViewController;
+			path = ../../DPAccordionTableViewController/Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -319,6 +320,7 @@
 				2E27CFF316188D3400C60ECC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
