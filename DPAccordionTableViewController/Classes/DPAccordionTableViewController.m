@@ -116,7 +116,7 @@
         if ([self.datasource respondsToSelector:@selector(accordionTableView:titleForSection:)]) {
             [titleLabel setText:[self.datasource accordionTableView:tableView titleForSection:section]];
         }else{
-            [titleLabel setText:[NSString stringWithFormat:@"Section %d",section]];
+            [titleLabel setText:[NSString stringWithFormat:@"Section %ld",(long)section]];
         }
         [header addSubview:titleLabel];
     }

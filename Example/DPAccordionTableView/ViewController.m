@@ -56,7 +56,7 @@
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    [cell.textLabel setText:[NSString stringWithFormat:@"Row %d",indexPath.row]];
+    [cell.textLabel setText:[NSString stringWithFormat:@"Row %ld",(long)indexPath.row]];
     // Configure the cell...
     
     return cell;
@@ -67,7 +67,7 @@
     UIView *view=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
     UILabel *titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 300, 30)];
 
-    [titleLabel setText:[NSString stringWithFormat:@"Custom Section %d",section]];
+    [titleLabel setText:[NSString stringWithFormat:@"Custom Section %ld",(long)section]];
     [view addSubview:titleLabel];
     
     return view;

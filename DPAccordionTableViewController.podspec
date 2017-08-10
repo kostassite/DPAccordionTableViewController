@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DPAccordionTableViewController'
-  s.version          = '1.0'
+  s.version          = '2.0'
   s.summary          = 'UITableView with Accordion support on sections'
 
 # This description is used to generate tags and improve search results.
@@ -29,7 +29,7 @@ DESC
 
   s.ios.deployment_target = '9.0'
 
-  s.source_files = 'NAME_OF_POD/Classes/**/*'
+  s.source_files = 'DPAccordionTableViewController/Classes/**/*'
   
   # s.resource_bundles = {
   #   'DPAccordionTableViewController' => ['DPAccordionTableViewController/Assets/*.png']
