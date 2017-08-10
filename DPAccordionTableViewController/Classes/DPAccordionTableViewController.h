@@ -43,11 +43,14 @@
 
 @end
 
-@interface DPAccordionTableViewController : UIViewController
+@interface DPAccordionTableViewController : UIViewController{
+    NSMutableSet<NSNumber*> *_openSectionsSet;
+}
 
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDataSource> datasource;
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDelegate> delegate;
 
+@property (nonatomic) BOOL allowMultipleOpenSections; //default NO
 @property (nonatomic) NSInteger openSection; //set NSNotFound to close all sections
 -(void)setOpenSection:(NSInteger)openSection animated:(BOOL)animated;
 

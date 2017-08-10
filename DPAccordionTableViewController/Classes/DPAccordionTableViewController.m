@@ -19,12 +19,11 @@
 @synthesize datasource;
 @synthesize delegate;
 @synthesize tableView;
-@synthesize openSection = _openSection;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _openSection=NSNotFound;
+    _openSectionsSet = [NSMutableSet new];
 
     tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [tableView setDelegate:self];
@@ -54,7 +53,10 @@
 }
 
 -(NSInteger)openSection{
-    return _openSection;
+    if (_openSectionsSet.count == 0) {
+        return NSNotFound;
+    }
+    return _openSectionsSet.anyObject.integerValue;
 }
 
 -(void)setOpenSection:(NSInteger)openSection{
@@ -62,12 +64,11 @@
 }
 
 -(void)setOpenSection:(NSInteger)openSection animated:(BOOL)animated{
-    if (openSection!=NSNotFound) {
-        [self openSection:openSection animated:animated];
+    if ([_openSectionsSet containsObject:[NSNumber numberWithInteger:openSection]]) {
+        [self closeSection:openSection];
     }else{
-        [self closeSection:_openSection];
+        [self openSection:openSection animated:animated];
     }
-    
 }
 
 #pragma mark - Table view data source
@@ -80,7 +81,7 @@
 
 - (NSInteger)tableView:(UITableView *)itableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section==_openSection) {
+    if ([_openSectionsSet containsObject:[NSNumber numberWithInteger:section]]) {
         return [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section];
     }
     return 0;
@@ -180,16 +181,19 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView2 heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return [self.delegate accordionTableView:tableView2 heightForRowAtIndexPath:indexPath];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:heightForRowAtIndexPath:)]) {
+        return [self.delegate accordionTableView:tableView2 heightForRowAtIndexPath:indexPath];
+    }
+    return tableView2.rowHeight;
 }
 
 #pragma mark - Header Actions
 
 -(void)headerTapped:(UITapGestureRecognizer*)sender{
-    if (_openSection!=sender.view.tag) { //einai kleisto
-        [self openSection:sender.view.tag animated:YES];
-    }else{
+    if ([_openSectionsSet containsObject:[NSNumber numberWithInteger:sender.view.tag]]) { //its open
         [self closeSection:sender.view.tag];
+    }else{
+        [self openSection:sender.view.tag animated:YES];
     }
     
 }
@@ -206,17 +210,18 @@
 #pragma mark - Open/Close TableView
 
 -(void)openSection:(NSInteger)section animated:(BOOL)animated{
-    if (_openSection>=[datasource numberOfSectionsInAccordionTableView:tableView]) {
-        _openSection = NSNotFound;
-    }
     if (self.delegate && [self.delegate respondsToSelector:@selector(accordionTableView:shouldOpenSection:)]) {
         if (![self.delegate accordionTableView:tableView shouldOpenSection:section]) {
             return;
         }
     }
-    NSInteger oldOpenSection=_openSection;
-
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:willCloseSection:)]&&oldOpenSection!=NSNotFound) {
+    
+    NSInteger oldOpenSection=NSNotFound;
+    if (_openSectionsSet.count > 0 && !self.allowMultipleOpenSections) {
+        oldOpenSection=_openSectionsSet.anyObject.integerValue;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:willCloseSection:)] && oldOpenSection!=NSNotFound) {
         [self.delegate accordionTableView:tableView willCloseSection:oldOpenSection];
     }
     
@@ -224,14 +229,14 @@
         [self.delegate accordionTableView:tableView willOpenSection:section];
     }
     
-    //close previous open rows
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
-    
-     if (_openSection != NSNotFound) {
-        for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:_openSection]; i++) {
-            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:_openSection]];
+    //close previous open rows
+    if (oldOpenSection != NSNotFound) {
+        for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:oldOpenSection]; i++) {
+            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:oldOpenSection]];
         }
     }
+    
     //open new rows
     NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section]; i++) {
@@ -241,7 +246,7 @@
     // Style the animation so that there's a smooth flow in either direction.
     UITableViewRowAnimation insertAnimation;
     UITableViewRowAnimation deleteAnimation;
-    if (section == NSNotFound || section < _openSection) {
+    if (section == NSNotFound || section < oldOpenSection) {
         insertAnimation = UITableViewRowAnimationTop;
         deleteAnimation = UITableViewRowAnimationBottom;
     }else {
@@ -253,7 +258,10 @@
         insertAnimation = UITableViewRowAnimationNone;
         deleteAnimation = UITableViewRowAnimationNone;
     }
-    _openSection=section;
+    if (!self.allowMultipleOpenSections) {
+        [_openSectionsSet removeAllObjects];
+    }
+    [_openSectionsSet addObject:[NSNumber numberWithInteger:section]];
 
     // Apply the updates.
     [self.view setUserInteractionEnabled:NO];
@@ -298,13 +306,14 @@
     //close open rows
     NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
     
-    if (_openSection != NSNotFound) {
+    if (section != NSNotFound) {
         for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section]; i++) {
             [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:section]];
         }
     }
     
-    _openSection=NSNotFound;
+    [_openSectionsSet removeObject:[NSNumber numberWithInteger:section]];
+    
     // Apply the updates.
     [self.view setUserInteractionEnabled:NO];
     [tableView beginUpdates];
@@ -314,7 +323,7 @@
     if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)]) {
         [self.delegate accordionTableView:tableView didCloseSection:section];
     }
-//    [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
     [self.view setUserInteractionEnabled:YES];
 }
 
