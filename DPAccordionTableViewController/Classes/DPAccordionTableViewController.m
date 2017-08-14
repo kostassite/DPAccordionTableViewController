@@ -64,11 +64,15 @@
 }
 
 -(void)setOpenSection:(NSInteger)openSection animated:(BOOL)animated{
-    if ([_openSectionsSet containsObject:[NSNumber numberWithInteger:openSection]]) {
+    if ([self isSectionOpen:openSection]) {
         [self closeSection:openSection];
     }else{
         [self openSection:openSection animated:animated];
     }
+}
+
+-(BOOL)isSectionOpen:(NSInteger)sectionIndex{
+    return [_openSectionsSet containsObject:[NSNumber numberWithInteger:sectionIndex]];
 }
 
 #pragma mark - Table view data source
@@ -81,7 +85,7 @@
 
 - (NSInteger)tableView:(UITableView *)itableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([_openSectionsSet containsObject:[NSNumber numberWithInteger:section]]) {
+    if ([self isSectionOpen:section]) {
         return [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section];
     }
     return 0;
@@ -190,7 +194,7 @@
 #pragma mark - Header Actions
 
 -(void)headerTapped:(UITapGestureRecognizer*)sender{
-    if ([_openSectionsSet containsObject:[NSNumber numberWithInteger:sender.view.tag]]) { //its open
+    if ([self isSectionOpen:sender.view.tag]) { //its open
         [self closeSection:sender.view.tag];
     }else{
         [self openSection:sender.view.tag animated:YES];

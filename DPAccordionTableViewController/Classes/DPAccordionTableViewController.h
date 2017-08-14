@@ -51,6 +51,8 @@
 @property (nonatomic,weak) id<DPAccordionTableViewControllerDelegate> delegate;
 
 @property (nonatomic) BOOL allowMultipleOpenSections; //default NO
+-(BOOL)isSectionOpen:(NSInteger)sectionIndex;
+
 @property (nonatomic) NSInteger openSection; //set NSNotFound to close all sections
 -(void)setOpenSection:(NSInteger)openSection animated:(BOOL)animated;
 
