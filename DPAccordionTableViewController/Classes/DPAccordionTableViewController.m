@@ -229,7 +229,7 @@
         [self.delegate accordionTableView:tableView willCloseSection:oldOpenSection];
     }
     
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:willOpenSection:)]) {
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:willOpenSection:)] && section!=NSNotFound) {
         [self.delegate accordionTableView:tableView willOpenSection:section];
     }
     
@@ -290,7 +290,7 @@
         [self.delegate accordionTableView:tableView didCloseSection:oldOpenSection];
     }
     
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:didOpenSection:)]) {
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:didOpenSection:)] && section!=NSNotFound) {
         [self.delegate accordionTableView:tableView didOpenSection:section];
     }
     
@@ -305,7 +305,7 @@
         }
     }
     
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:willCloseSection:)]) {
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:willCloseSection:)] && section!=NSNotFound ) {
         [self.delegate accordionTableView:tableView willCloseSection:section];
     }
     
@@ -326,7 +326,7 @@
     [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
     [tableView endUpdates];
     
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)]) {
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)] && section!=NSNotFound ) {
         [self.delegate accordionTableView:tableView didCloseSection:section];
     }
 
