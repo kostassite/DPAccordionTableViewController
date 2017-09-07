@@ -243,8 +243,10 @@
     
     //open new rows
     NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
-    for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section]; i++) {
-        [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:section]];
+    if (section != NSNotFound) {
+        for (NSInteger i = 0; i < [self.datasource accordionTableView:tableView numberOfRowsInExpandedSection:section]; i++) {
+            [indexPathsToInsert addObject:[NSIndexPath indexPathForRow:i inSection:section]];
+        }
     }
     
     // Style the animation so that there's a smooth flow in either direction.
