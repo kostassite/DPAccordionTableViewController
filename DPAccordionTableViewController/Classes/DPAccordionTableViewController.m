@@ -125,9 +125,11 @@
         [header addSubview:titleLabel];
     }
 
-    UITapGestureRecognizer *tapRecognizer=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerTapped:)];
-    [tapRecognizer setDelegate:self];
-    [header addGestureRecognizer:tapRecognizer];
+    if (header.gestureRecognizers.count == 0) {
+        UITapGestureRecognizer *tapRecognizer=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerTapped:)];
+        [tapRecognizer setDelegate:self];
+        [header addGestureRecognizer:tapRecognizer];
+    }
 
     header.tag=section;
     
