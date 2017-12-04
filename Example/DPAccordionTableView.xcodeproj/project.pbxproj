@@ -152,6 +152,11 @@
 			attributes = {
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Kostas Antonopoulos";
+				TargetAttributes = {
+					2E27CFC916188D3400C60ECC = {
+						ProvisioningStyle = Manual;
+					};
+				};
 			};
 			buildConfigurationList = 2E27CFC416188D3400C60ECC /* Build configuration list for PBXProject "DPAccordionTableView" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -282,10 +287,14 @@
 		2E27CFF216188D3400C60ECC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DPAccordionTableView/DPAccordionTableView-Prefix.pch";
 				INFOPLIST_FILE = "DPAccordionTableView/DPAccordionTableView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -293,10 +302,14 @@
 		2E27CFF316188D3400C60ECC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DPAccordionTableView/DPAccordionTableView-Prefix.pch";
 				INFOPLIST_FILE = "DPAccordionTableView/DPAccordionTableView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
