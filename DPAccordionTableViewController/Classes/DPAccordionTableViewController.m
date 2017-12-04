@@ -180,6 +180,9 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if ([self.delegate respondsToSelector:@selector(accordionTableView:heightForHeaderInSection:)]) {
+        return [self.delegate accordionTableView:tableView heightForHeaderInSection:section];
+    }
     if (self.tableHeaderHeight) {
         return self.tableHeaderHeight;
     }
