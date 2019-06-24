@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'DPAccordionTableViewController'
-  s.version          = '2.3'
+  s.version          = '2.4'
   s.summary          = 'UITableView with Accordion support on sections'
 
 # This description is used to generate tags and improve search results.
