@@ -225,6 +225,10 @@
         }
     }
     
+    if (section != NSNotFound && [_openSectionsSet containsObject:[NSNumber numberWithInteger:section]]) {
+        return;
+    }
+
     NSInteger oldOpenSection=NSNotFound;
     if (_openSectionsSet.count > 0 && !self.allowMultipleOpenSections) {
         oldOpenSection=_openSectionsSet.anyObject.integerValue;
