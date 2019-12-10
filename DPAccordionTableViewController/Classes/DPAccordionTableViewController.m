@@ -273,38 +273,29 @@
         insertAnimation = UITableViewRowAnimationNone;
         deleteAnimation = UITableViewRowAnimationNone;
     }
-    if (!self.allowMultipleOpenSections) {
-        [_openSectionsSet removeAllObjects];
-    }
-    [_openSectionsSet addObject:[NSNumber numberWithInteger:section]];
 
     // Apply the updates.
     [self.view setUserInteractionEnabled:NO];
-    [tableView beginUpdates];
-    [tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
-    [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
-    [tableView endUpdates];
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self.forceClosedSectionsAtBottom) {
-            [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-        }else{
-            if ([indexPathsToInsert count]!=0) {
-                [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-            }
+    [tableView performBatchUpdates:^{
+        if (!self.allowMultipleOpenSections) {
+            [_openSectionsSet removeAllObjects];
         }
-    });
+        [_openSectionsSet addObject:[NSNumber numberWithInteger:section]];
+        
+        [tableView insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
+        [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
+    } completion:^(BOOL finished) {
+         if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)]&&oldOpenSection!=NSNotFound) {
+               [self.delegate accordionTableView:tableView didCloseSection:oldOpenSection];
+           }
+           
+           if ([self.delegate respondsToSelector:@selector(accordionTableView:didOpenSection:)] && section!=NSNotFound) {
+               [self.delegate accordionTableView:tableView didOpenSection:section];
+           }
+           
+           [self.view setUserInteractionEnabled:YES];
+    }];
     
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)]&&oldOpenSection!=NSNotFound) {
-        [self.delegate accordionTableView:tableView didCloseSection:oldOpenSection];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:didOpenSection:)] && section!=NSNotFound) {
-        [self.delegate accordionTableView:tableView didOpenSection:section];
-    }
-    
-
-    [self.view setUserInteractionEnabled:YES];
 }
 
 -(void)closeSection:(NSInteger)section{
@@ -326,20 +317,18 @@
             [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:section]];
         }
     }
-    
-    [_openSectionsSet removeObject:[NSNumber numberWithInteger:section]];
-    
     // Apply the updates.
     [self.view setUserInteractionEnabled:NO];
-    [tableView beginUpdates];
-    [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
-    [tableView endUpdates];
-    
-    if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)] && section!=NSNotFound ) {
-        [self.delegate accordionTableView:tableView didCloseSection:section];
-    }
+    [tableView performBatchUpdates:^{
+        [_openSectionsSet removeObject:[NSNumber numberWithInteger:section]];
+        [tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+    } completion:^(BOOL finished) {
+        if ([self.delegate respondsToSelector:@selector(accordionTableView:didCloseSection:)] && section!=NSNotFound ) {
+            [self.delegate accordionTableView:tableView didCloseSection:section];
+        }
 
-    [self.view setUserInteractionEnabled:YES];
+        [self.view setUserInteractionEnabled:YES];
+    }];
 }
 
 @end
